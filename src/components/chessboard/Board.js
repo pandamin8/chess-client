@@ -1,10 +1,17 @@
 import { useState } from 'react'
+import { manager } from '../../socket'
 
 import Chess from 'chess.js'
 import { Chessboard } from 'react-chessboard'
 
 const Board = () => {
 	const [game, setGame] = useState(new Chess())
+
+	const socket = manager.socket('/chessboard')
+
+	socket.on('connection', () => {
+		console.log('connected to the socket server')
+	})
 
 	// perform modify function on game state
 	function safeGameMutate(modify) {
@@ -27,6 +34,12 @@ const Board = () => {
 
 		// illegal move made
 		if (move === null) return false
+
+		// checkmate
+		// if (move === null && )
+		if (game.in_checkmate()) {
+			console.log('in checkmate')
+		}
     
 		return true
 	}
